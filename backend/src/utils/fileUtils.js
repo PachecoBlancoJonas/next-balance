@@ -1,27 +1,33 @@
-const fs = require("fs-extra");
-const path = require("path");
+import pkg from "fs-extra";
+const { existsSync, readJson, writeJson } = pkg;
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
-// Ruta del archivo tokens.json
-const tokensFilePath = path.join(__dirname, "../tokens.json");
+// get dirname on ESM (ES Modules)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// Leer el archivo tokens.json
+// token path
+const tokensFilePath = join(__dirname, "../tokens.json");
+
+// Read tokens.json
 const readTokenFile = async () => {
-  if (fs.existsSync(tokensFilePath)) {
-    return await fs.readJson(tokensFilePath);
-  }
-  return null;
+    if (existsSync(tokensFilePath)) {
+        return await readJson(tokensFilePath);
+    }
+    return null;
 };
 
-// Escribir en el archivo tokens.json
+// Write tokens.json
 const writeTokenFile = async (tokenData) => {
-  const existingData = fs.existsSync(tokensFilePath)
-    ? await fs.readJson(tokensFilePath)
-    : {};
+    const existingData = existsSync(tokensFilePath)
+        ? await readJson(tokensFilePath)
+        : {};
 
-  // Combinar los datos existentes con los nuevos
-  const updatedData = { ...existingData, ...tokenData };
+    // Combinar los datos existentes con los nuevos
+    const updatedData = { ...existingData, ...tokenData };
 
-  await fs.writeJson(tokensFilePath, updatedData, { spaces: 2 });
+    await writeJson(tokensFilePath, updatedData, { spaces: 2 });
 };
 
-module.exports = { readTokenFile, writeTokenFile };
+export default { readTokenFile, writeTokenFile };

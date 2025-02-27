@@ -1,8 +1,8 @@
 // backend/app.js
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const apiRoutes = require("./src/routes/api");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import apiRoutes from "./src/routes/api.js";
 
 // get env variables
 dotenv.config();
