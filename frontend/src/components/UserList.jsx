@@ -1,4 +1,5 @@
 // frontend/src/components/UserList.jsx
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -6,9 +7,9 @@ const UserList = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        fetch(`${apiUrl}/users`)
-            .then((response) => response.json())
-            .then((data) => setUsers(data))
+        axios
+            .get(`${apiUrl}/users`)
+            .then((response) => setUsers(response.data))
             .catch((error) => console.error("Error fetching users:", error));
     }, []);
 
@@ -19,7 +20,7 @@ const UserList = () => {
                 <ul>
                     {users.map((user) => (
                         <li key={user.id}>
-                            {user.username} - {user.email}
+                            {user.id} - {user.email}
                         </li>
                     ))}
                 </ul>

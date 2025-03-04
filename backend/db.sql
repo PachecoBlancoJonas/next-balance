@@ -1,6 +1,6 @@
-CREATE DATABASE next-balance;
+CREATE DATABASE next_balance;
 
-USE next-balance;
+USE next_balance;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -8,7 +8,6 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    is_active BOOLEAN DEFAULT TRUE,
     last_login TIMESTAMP NULL DEFAULT NULL
 );
 

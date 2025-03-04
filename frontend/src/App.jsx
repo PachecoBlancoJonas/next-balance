@@ -8,11 +8,11 @@ import UserList from "./components/UserList.jsx";
 function App() {
     return (
         <>
-            <h1>Gestión de Usuarios</h1>
+            <h1>New user:</h1>
             <UserForm />
             <UserList />
-            <BanksComponent />
-            <BankLinkComponent />
+            {/* <BanksComponent />
+            <BankLinkComponent /> */}
         </>
     );
 }

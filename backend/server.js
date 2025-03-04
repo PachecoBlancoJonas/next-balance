@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import apiRoutes from "./src/routes/api.js";
+import userRoutes from "./src/routes/userRouter.js";
 
 // get env variables
 dotenv.config();
@@ -14,10 +15,10 @@ server.use(express.json()); // support JSON on requests
 
 // Routes
 server.use("/api", apiRoutes);
-server.use("/users", apiRoutes);
-
+server.use("/users", userRoutes);
 
 // Start server
+
 const PORT = process.env.PORT;
 server.listen(PORT, () => {
     console.log(`server is running on http://localhost:${PORT}`);
