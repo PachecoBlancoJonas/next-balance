@@ -14,6 +14,8 @@ server.use(express.json()); // support JSON on requests
 
 // Routes
 server.use("/api", apiRoutes);
+server.use("/users", apiRoutes);
+
 
 // Start server
 const PORT = process.env.PORT;
