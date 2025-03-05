@@ -1,6 +1,7 @@
 // frontend/src/components/UserForm.jsx
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const UserForm = () => {
@@ -8,6 +9,7 @@ const UserForm = () => {
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
 
     const passwordInput = document.getElementById("password");
     const repeatPasswordInput = document.getElementById("repeatPassword");
@@ -28,7 +30,7 @@ const UserForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Check password
@@ -38,21 +40,20 @@ const UserForm = () => {
             repeatPasswordInput.value = "";
             return;
         }
-
-        axios
-            .post(`${apiUrl}/users`, { email, password })
-            .then((response) => {
-                console.log("User created:", response.data);
-                // You could clear the form or update the user list here
-            })
-            .catch((error) => {
-                if (error.response && error.response.status === 400) {
-                    // console.error("Server error:", error.response.data.error); // Muestra solo el mensaje del servidor
-                    setErrorMessage(error.response.data.error); // Show error message in UI
-                } else {
-                    console.error("Unexpected error:", error);
-                }
+        try {
+            const response = await axios.post(`${apiUrl}/users`, {
+                email,
+                password,
             });
+            localStorage.setItem("token", response.data.token);
+            console.log(response.data.message); // debug
+
+            navigate("/");
+        } catch (error) {
+            setErrorMessage(
+                error.response?.data?.error || "Error al crear usuario"
+            );
+        }
     };
 
     return (

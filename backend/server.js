@@ -2,11 +2,12 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import "dotenv/config";
 import apiRoutes from "./src/routes/api.js";
 import userRoutes from "./src/routes/userRouter.js";
 
 // get env variables
-dotenv.config();
+// dotenv.config();
 
 // server config
 const server = express();
