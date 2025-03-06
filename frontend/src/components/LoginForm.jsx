@@ -13,12 +13,13 @@ const LoginForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${apiUrl}/users/login`, {
+            const response = await axios.post(`${apiUrl}/user/login`, {
                 email,
                 password,
-            });
+            }, { withCredentials: true, });
 
-            localStorage.setItem("token", response.data.token); // Guardar el token en localStorage o en cookies
+            // localStorage.setItem("token", response.data.token); // Guardar el token en localStorage o en cookies
+
             navigate("/"); // Redirigir a la página principal
 
             // Redirigir al usuario o hacer alguna otra acción después del login

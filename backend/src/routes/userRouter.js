@@ -1,16 +1,13 @@
 // backend/src/routers/userRouter.js
 import { Router } from "express";
-import {
-    createUser,
-    getUsers,
-    loginController,
-} from "../controllers/userController.js"; // Importar las funciones del controlador
+import * as userController from "../controllers/userController.js";
+import verifyToken from "../middleware/verifyToken.js";
 
 const router = Router();
 
-router.post("/", createUser);
-router.get("/", getUsers);
-router.post("/login", loginController);
+router.post("/create", userController.createUser);
+router.post("/login", userController.loginUser);
+router.get("/list", verifyToken, userController.getUsers);
 
 
 export default router;

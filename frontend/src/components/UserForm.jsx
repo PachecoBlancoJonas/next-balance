@@ -1,31 +1,31 @@
 // frontend/src/components/UserForm.jsx
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const UserForm = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const navigate = useNavigate();
 
-    const passwordInput = document.getElementById("password");
-    const repeatPasswordInput = document.getElementById("repeatPassword");
+    const passwordRef = useRef(null);
+    const repeatPasswordRef = useRef(null);
 
     // Toggle password
     const tooglePassword = (e) => {
         if (
-            passwordInput.type === "password" &&
-            repeatPasswordInput.type === "password"
+            passwordRef.current.type === "password" &&
+            repeatPasswordRef.current.type === "password"
         ) {
-            passwordInput.type = "text";
-            repeatPasswordInput.type = "text";
+            passwordRef.current.type = "text";
+            repeatPasswordRef.current.type = "text";
             e.target.textContent = "🙈"; // Cambia el icono
         } else {
-            passwordInput.type = "password";
-            repeatPasswordInput.type = "password";
+            passwordRef.current.type = "password";
+            repeatPasswordRef.current.type = "password";
             e.target.textContent = "👁️";
         }
     };
@@ -36,16 +36,16 @@ const UserForm = () => {
         // Check password
         if (password !== repeatPassword) {
             setErrorMessage("Password does not match.");
-            passwordInput.value = "";
-            repeatPasswordInput.value = "";
+            passwordRef.current.value = "";
+            repeatPasswordRef.current.value = "";
             return;
         }
         try {
-            const response = await axios.post(`${apiUrl}/users`, {
+            const response = await axios.post(`${apiUrl}/user/create`, {
                 email,
                 password,
             });
-            localStorage.setItem("token", response.data.token);
+            // localStorage.setItem("token", response.data.token);
             console.log(response.data.message); // debug
 
             navigate("/");
@@ -72,10 +72,23 @@ const UserForm = () => {
                 <input
                     id="password"
                     type="password"
+                    ref={passwordRef}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
+            </div>
+            <div>
+                <label>Repeat password:</label>
+                <input
+                    id="repeatPassword"
+                    type="password"
+                    ref={repeatPasswordRef}
+                    value={repeatPassword}
+                    onChange={(e) => setRepeatPassword(e.target.value)}
+                    required
+                />
+            </div>
                 <button
                     type="button"
                     id="togglePassword"
@@ -83,17 +96,6 @@ const UserForm = () => {
                 >
                     👁️
                 </button>
-            </div>
-            <div>
-                <label>Repeat password:</label>
-                <input
-                    id="repeatPassword"
-                    type="password"
-                    value={repeatPassword}
-                    onChange={(e) => setRepeatPassword(e.target.value)}
-                    required
-                />
-            </div>
             <button type="submit">Create</button>
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         </form>
