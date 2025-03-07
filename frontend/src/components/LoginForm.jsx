@@ -13,7 +13,7 @@ const LoginForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${apiUrl}/user/login`, {
+            await axios.post(`${apiUrl}/user/login`, {
                 email,
                 password,
             }, { withCredentials: true, });

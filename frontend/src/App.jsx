@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
 import { BanksComponent } from "./components/BanksComponent";
 import { BankLinkComponent } from "./components/BankLinkComponent";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoginForm from "./components/LoginForm";
 import UserForm from "./components/UserForm.jsx";
 import UserList from "./components/UserList.jsx";
 import { useAuth } from "./context/UserContext.jsx";
@@ -32,7 +33,14 @@ function App() {
                     <Route path="/" element={<h1>Inicio</h1>} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/create-user" element={<UserForm />} />
-                    <Route path="/list" element={<UserList />} />
+                    <Route
+                        path="/list"
+                        element={
+                            <ProtectedRoute>
+                                <UserList />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </Router>
         </>
