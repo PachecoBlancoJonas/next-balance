@@ -2,7 +2,6 @@
 import pool from "../db/index.js";
 import * as userService from "../services/userService.js";
 
-
 export const createUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -57,4 +56,11 @@ export const loginUser = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
+};
+
+export const getCurrentUser = (req, res) => {
+    if (!req.activeUser)
+        return res.status(401).json({ error: "No autenticado" });
+
+    res.json({ id: req.activeUser.id, email: req.activeUser.email });
 };

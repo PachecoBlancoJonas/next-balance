@@ -4,8 +4,7 @@ const SECRET_KEY = process.env.JWT_SECRET; // Asumiendo que tienes un archivo de
 // Middleware para verificar si el token JWT es válido
 const verifyToken = (req, res, next) => {
     // Obtener el token desde las cookies (suponiendo que usamos cookies HttpOnly)
-    const token = req.cookies.token;
-    
+    const token = req.cookies.token;    
 
     if (!token) {
         return res

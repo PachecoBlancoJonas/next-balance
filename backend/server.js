@@ -15,7 +15,7 @@ const server = express();
 server.use(cookieParser()); // Usa cookie-parser para que las cookies estén disponibles en `req.cookies`
 server.use(
     cors({
-        origin: "http://192.168.100.111:5173", // Asegúrate de usar el URL correcto de tu frontend
+        origin: process.env.FRONTEND_URL, // Asegúrate de usar el URL correcto de tu frontend
         credentials: true, // Permitir que las cookies se envíen
     })
 );
