@@ -8,23 +8,15 @@ import UserForm from "./components/UserForm.jsx";
 import UserList from "./components/UserList.jsx";
 import { useAuth } from "./context/UserContext.jsx";
 import "./App.css";
+import Header from "./components/Header.jsx";
 
 function App() {
-    const { user } = useAuth();
     return (
         <>
             <Router>
-                {user ? (
-                    <>
-                        <p>Bienvenido, {user.email}</p>
-                        <Link to="/">log out</Link>
-                    </>
-                ) : (
-                    <p>No estás autenticado</p>
-                )}
+                <Header />
                 <nav>
                     <Link to="/">Inicio</Link>
-                    <Link to="/login">Login</Link>
                     <Link to="/create-user">Crear Usuario</Link>
                     <Link to="/list">Lista de Usuarios</Link>
                 </nav>

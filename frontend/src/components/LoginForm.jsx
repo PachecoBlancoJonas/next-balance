@@ -1,30 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../context/UserContext.jsx";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
-    const navigate = useNavigate(); // Para redirigir después de iniciar sesión
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            await axios.post(`${apiUrl}/user/login`, {
-                email,
-                password,
-            }, { withCredentials: true, });
-
-            // localStorage.setItem("token", response.data.token); // Guardar el token en localStorage o en cookies
-
+            await login(email, password);
             navigate("/"); // Redirigir a la página principal
 
             // Redirigir al usuario o hacer alguna otra acción después del login
-        } catch (error) {
-            setError(error.response?.data?.error || "Error en el login");
+        } catch (error) {            
+            setError(error.message || "Error en el login");
         }
     };
 

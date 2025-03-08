@@ -34,7 +34,7 @@ export const loginUser = async (email, password) => {
         expiresIn: "1h",
     });
 
-    return token;
+    return { token, user };
 };
 
 export const createUser = async (email, password) => {

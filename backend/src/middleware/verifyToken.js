@@ -19,7 +19,7 @@ const verifyToken = (req, res, next) => {
         }
 
         // Si el token es válido, se pasa la información decodificada al siguiente middleware
-        req.activeUser = decoded; // Almacenamos la info del usuario decodificada para usarla en rutas protegidas
+        req.user = decoded; // Almacenamos la info del usuario decodificada para usarla en rutas protegidas
         next(); // Llamamos a next() para pasar a la siguiente función (ruta, controlador)
     });
 };
