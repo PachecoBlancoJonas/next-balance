@@ -32,8 +32,8 @@ const getNewAccessToken = async () => {
 
         return data;
     } catch (err) {
-        console.error("Error obteniendo el token:", err);
-        throw new Error("No se pudo obtener el token");
+        console.error("Error fetching token:", err);
+        throw new Error("Cannot get token");
     }
 };
 
@@ -63,8 +63,8 @@ const refreshAccessToken = async (refresh) => {
 
         return data;
     } catch (err) {
-        console.error("Error obteniendo el token:", err);
-        throw new Error("No se pudo obtener el token");
+        console.error("Error fetching token:", err);
+        throw new Error("Cannot get token");
     }
 };
 

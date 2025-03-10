@@ -7,15 +7,14 @@ export const BankLinkComponent = () => {
   const fetchLink = async () => {
     const response = await axios.get("/api/bank-link/");
 
-    // console.log(response.data);
     setBankLink(response.data.link);
   };
   return (
     <>
-      <button onClick={fetchLink}>Crear link santander</button>
+      <button onClick={fetchLink}>Creaate bank link</button>
       {bankLink && (
         <a href={bankLink} target="_blank">
-          Enlace banco Santander
+          Bank link
         </a>
       )}
     </>

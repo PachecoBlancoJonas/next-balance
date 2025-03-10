@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
             try {
                 await axios.get(`${apiUrl}/user/me`, {
                     withCredentials: true,
-                }); // Verifica sesión en el backend
+                });
                 setIsAuthenticated(true);
             } catch (error) {
                 setIsAuthenticated(false);
@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children }) => {
         checkAuth();
     }, []);
 
-    if (isAuthenticated === null) return <p>Loading...</p>; // Muestra carga mientras verifica
+    if (isAuthenticated === null) return <p>Loading...</p>;
     return isAuthenticated ? children : <Navigate to="/login" />;
 };
 

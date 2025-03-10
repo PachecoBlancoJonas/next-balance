@@ -14,7 +14,6 @@ const UserForm = () => {
     const passwordRef = useRef(null);
     const repeatPasswordRef = useRef(null);
 
-    // Toggle password
     const tooglePassword = (e) => {
         if (
             passwordRef.current.type === "password" &&
@@ -22,7 +21,7 @@ const UserForm = () => {
         ) {
             passwordRef.current.type = "text";
             repeatPasswordRef.current.type = "text";
-            e.target.textContent = "🙈"; // Cambia el icono
+            e.target.textContent = "🙈";
         } else {
             passwordRef.current.type = "password";
             repeatPasswordRef.current.type = "password";
@@ -33,7 +32,6 @@ const UserForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check password
         if (password !== repeatPassword) {
             setErrorMessage("Password does not match.");
             passwordRef.current.value = "";
@@ -45,13 +43,11 @@ const UserForm = () => {
                 email,
                 password,
             });
-            // localStorage.setItem("token", response.data.token);
-            console.log(response.data.message); // debug
 
             navigate("/");
         } catch (error) {
             setErrorMessage(
-                error.response?.data?.error || "Error al crear usuario"
+                error.response?.data?.error || "Create user error"
             );
         }
     };
@@ -96,7 +92,7 @@ const UserForm = () => {
                 >
                     👁️
                 </button>
-            <button type="submit">Create</button>
+            <button type="submit">Create user</button>
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         </form>
     );

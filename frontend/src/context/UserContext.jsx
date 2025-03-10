@@ -3,35 +3,32 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
-// Custom hook para usar el contexto
 export const useAuth = () => {
     return useContext(AuthContext);
 };
 
 export const UserContext = ({ children }) => {
-    const [user, setUser] = useState(null); // Estado para el usuario
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const apiUrl = import.meta.env.VITE_API_URL;
 
-    // Verifica si hay un usuario al inicio (cuando se carga el componente)
     useEffect(() => {
         const checkUser = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/user/me`, {
                     withCredentials: true,
                 });
-                setUser(response.data); // Si el token es válido, se obtiene el usuario
+                setUser(response.data);
             } catch (error) {
-                setUser(null); // Si no se puede obtener el usuario, lo dejamos en null
+                setUser(null);
             } finally {
-                setLoading(false); // Se termina de cargar
+                setLoading(false);
             }
         };
 
-        checkUser(); // Llamamos a la función al montar el componente
+        checkUser();
     }, []);
 
-    // Función para iniciar sesión (se asume que ya tienes un backend que valida el login)
     const login = async (email, password) => {
         try {
             const response = await axios.post(
@@ -41,18 +38,17 @@ export const UserContext = ({ children }) => {
             );
             setUser(response.data);
         } catch (error) {
-            throw new Error(error.response?.data?.error || "Error en el login");
+            throw new Error(error.response?.data?.error || "Login error");
         }
     };
 
-    // Función para cerrar sesión (elimina la cookie)
     const logout = async () => {
         try {
             await axios.get(`${apiUrl}/user/logout`, { withCredentials: true });
 
             setUser(null);
         } catch (error) {
-            throw new Error(error.response?.data?.error || "Error en el login");
+            throw new Error(error.response?.data?.error || "Login error");
         }
     };
 

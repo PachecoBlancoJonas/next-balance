@@ -1,4 +1,3 @@
-// backend/src/db/index.js
 import mariadb from "mariadb";
 
 const pool = mariadb.createPool({
@@ -7,7 +6,6 @@ const pool = mariadb.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     connectionLimit: 5,
-    // allowPublicKeyRetrieval: true,
 });
 
 export default pool;

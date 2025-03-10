@@ -20,7 +20,7 @@ const UserList = () => {
     return (
         <div>
             <h1>{user.email}</h1>
-            <h2>Lista de Usuarios</h2>
+            <h2>User list</h2>
             {users.length > 0 ? (
                 <ul>
                     {users.map((user) => (
@@ -30,7 +30,7 @@ const UserList = () => {
                     ))}
                 </ul>
             ) : (
-                <p>No hay usuarios</p>
+                <p>Users not found</p>
             )}
         </div>
     );

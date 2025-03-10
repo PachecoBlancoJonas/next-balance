@@ -12,7 +12,7 @@ export const BanksComponent = () => {
   };
   return (
     <>
-      <button onClick={fetchToken}>Buscar bancos</button>
+      <button onClick={fetchToken}>Search banks</button>
       <ul>
         {banks.map((bank, index) => (
           <li key={index}>

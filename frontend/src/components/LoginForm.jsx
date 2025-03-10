@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../context/UserContext.jsx";
-const apiUrl = import.meta.env.VITE_API_URL;
 
 const LoginForm = () => {
     const [email, setEmail] = useState("");
@@ -16,11 +14,10 @@ const LoginForm = () => {
 
         try {
             await login(email, password);
-            navigate("/"); // Redirigir a la página principal
+            navigate("/");
 
-            // Redirigir al usuario o hacer alguna otra acción después del login
         } catch (error) {            
-            setError(error.message || "Error en el login");
+            setError(error.message || "Login error");
         }
     };
 
@@ -36,7 +33,7 @@ const LoginForm = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contraseña"
+                placeholder="Password"
             />
             <button type="submit">Login</button>
             {error && <p>{error}</p>}

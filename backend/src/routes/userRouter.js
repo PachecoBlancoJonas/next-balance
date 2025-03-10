@@ -1,4 +1,3 @@
-// backend/src/routers/userRouter.js
 import { Router } from "express";
 import * as userController from "../controllers/userController.js";
 import verifyToken from "../middleware/verifyToken.js";

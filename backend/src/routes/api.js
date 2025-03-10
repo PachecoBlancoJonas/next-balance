@@ -1,9 +1,9 @@
-// backend/routes/api.js
 import { Router } from "express";
 import axios from "axios";
 const router = Router();
 import tokenController from "../controllers/tokenController.js";
 const { getAccessToken } = tokenController;
+const PORT = process.env.PORT;
 
 // Route for banks list
 router.get("/banks/", async (req, res) => {
@@ -26,7 +26,7 @@ router.get("/banks/", async (req, res) => {
         res.json(response.data);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error obteniendo los bancos" });
+        res.status(500).json({ message: "Error fetching banks" });
     }
 });
 
@@ -39,7 +39,7 @@ router.get("/bank-link/", async (req, res) => {
         const response = await axios.post(
             `${process.env.GOCARDLESS_API_BASE_URL}/requisitions/`,
             {
-                redirect: "http://localhost:5001",
+                redirect: `http://localhost:${PORT}`,
                 institution_id: process.env.SANTANDER_ID,
             },
             {
@@ -54,7 +54,7 @@ router.get("/bank-link/", async (req, res) => {
         res.json(response.data);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error obteniendo los bancos" });
+        res.status(500).json({ message: "Error fetching banks" });
     }
 });
 
