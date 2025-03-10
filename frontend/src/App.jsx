@@ -15,14 +15,15 @@ function App() {
         <>
             <Router>
                 <Header />
-                <nav>
-                    <Link to="/">Inicio</Link>
-                    <Link to="/create-user">Crear Usuario</Link>
-                    <Link to="/list">Lista de Usuarios</Link>
-                </nav>
-
                 <Routes>
-                    <Route path="/" element={<h1>Inicio</h1>} />
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute>
+                                <h1>Inicio</h1>
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/create-user" element={<UserForm />} />
                     <Route

@@ -16,9 +16,18 @@ const Header = () => {
                 <>
                     <span>Bienvenido, {user.email}</span>
                     <LogoutButton />
+                    <nav>
+                        <Link to="/">Inicio</Link>
+                        <Link to="/list">Lista de Usuarios</Link>
+                    </nav>
                 </>
             ) : (
-                <Link to="/login">Iniciar sesión</Link>
+                <>
+                    <nav>
+                        <Link to="/create-user">Crear Usuario</Link>
+                        <Link to="/login">Iniciar sesión</Link>
+                    </nav>
+                </>
             )}
         </header>
     );
