@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext.jsx";
+import { CiLogout } from "react-icons/ci";
 
 const LogoutButton = () => {
     const { logout } = useAuth();
@@ -15,7 +15,11 @@ const LogoutButton = () => {
         }
     };
 
-    return <button onClick={handleLogout}>Logout</button>;
+    return (
+        <a onClick={handleLogout}>
+            Logout <CiLogout className="logout-icon" />
+        </a>
+    );
 };
 
 export default LogoutButton;

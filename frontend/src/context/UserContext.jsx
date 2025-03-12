@@ -18,6 +18,7 @@ export const UserContext = ({ children }) => {
                 const response = await axios.get(`${apiUrl}/user/me`, {
                     withCredentials: true,
                 });
+                
                 setUser(response.data);
             } catch (error) {
                 setUser(null);
@@ -36,6 +37,7 @@ export const UserContext = ({ children }) => {
                 { email, password },
                 { withCredentials: true }
             );
+            
             setUser(response.data);
         } catch (error) {
             throw new Error(error.response?.data?.error || "Login error");

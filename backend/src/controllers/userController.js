@@ -25,6 +25,21 @@ export const createUser = async (req, res) => {
     }
 };
 
+export const addGocardless = async (req, res) => {
+    const { gocardless_id, gocardless_key } = req.body;
+    const { id } = req.user;
+
+    try {
+        await userService.addGocardless(id, gocardless_id, gocardless_key);
+        res.status(201).json({
+            message: "GoCardless secret updated",
+        });
+    } catch (error) {
+        console.error("Database error:", error);
+        res.status(500).json({ error: "Error updating GoCardless secret" });
+    }
+};
+
 export const getUsers = async (req, res) => {
     try {
         const users = await userService.getUsers();
@@ -32,7 +47,7 @@ export const getUsers = async (req, res) => {
             users: users,
             user: req.user,
         };
-        
+
         res.json(data);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -52,7 +67,6 @@ export const loginUser = async (req, res) => {
 };
 
 export const logoutUser = async (req, res) => {
-    
     try {
         res.clearCookie("token");
 
@@ -68,4 +82,14 @@ export const getCurrentUser = (req, res) => {
     }
 
     res.json({ id: req.user.id, email: req.user.email });
+};
+
+export const getGocardless = async (req, res) => {
+    try {
+        const gocardlessID = await userService.getGocardless(req.user.id);
+
+        res.json(gocardlessID);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };

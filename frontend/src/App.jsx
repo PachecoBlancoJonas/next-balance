@@ -1,28 +1,48 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoginForm from "./components/LoginForm";
-import UserForm from "./components/UserForm.jsx";
+import NewUserForm from "./components/NewUserForm.jsx";
 import UserList from "./components/UserList.jsx";
 import "./App.css";
 import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import NextBalance from "./components/NextBalance.jsx";
+import NextTransactions from "./components/NextTransactions.jsx";
+import Settings from "./components/Settings.jsx";
 
 function App() {
     return (
         <>
             <Router>
                 <Header />
+
                 <Routes>
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/create-user" element={<NewUserForm />} />
                     <Route
                         path="/"
                         element={
                             <ProtectedRoute>
-                                <h1>Home</h1>
+                                <NextBalance />
                             </ProtectedRoute>
                         }
                     />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/create-user" element={<UserForm />} />
+                    <Route
+                        path="/transactions"
+                        element={
+                            <ProtectedRoute>
+                                <NextTransactions />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/settings"
+                        element={
+                            <ProtectedRoute>
+                                <Settings />
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route
                         path="/list"
                         element={
@@ -32,6 +52,8 @@ function App() {
                         }
                     />
                 </Routes>
+
+                <Footer />
             </Router>
         </>
     );

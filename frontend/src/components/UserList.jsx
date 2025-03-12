@@ -1,6 +1,6 @@
 // frontend/src/components/UserList.jsx
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const UserList = () => {

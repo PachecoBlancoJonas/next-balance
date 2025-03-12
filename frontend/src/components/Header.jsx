@@ -1,7 +1,8 @@
-import React from "react";
 import { useAuth } from "../context/UserContext.jsx";
 import { Link } from "react-router-dom";
 import LogoutButton from "./LogoutButton.jsx";
+import SettingsButton from "./SettingsButton.jsx";
+
 
 const Header = () => {
     const { user, loading } = useAuth();
@@ -14,18 +15,22 @@ const Header = () => {
         <header>
             {user ? (
                 <>
-                    <span>Welcome, {user.email}</span>
-                    <LogoutButton />
                     <nav>
-                        <Link to="/">Home</Link>
-                        <Link to="/list">Users list</Link>
+                        <Link to="/">NEXT_BALANCE</Link>
+                        <Link to="/transactions">NEXT_TRANSACTIONS</Link>
+                        <Link to="/list">User list</Link>
+                        <div className="rigth-links">
+                            <span>Welcome, {user.email}</span>
+                            <LogoutButton />
+                            <SettingsButton />
+                        </div>
                     </nav>
                 </>
             ) : (
                 <>
                     <nav>
-                        <Link to="/create-user">Create new user</Link>
                         <Link to="/login">Login</Link>
+                        <Link to="/create-user">Create new user</Link>
                     </nav>
                 </>
             )}

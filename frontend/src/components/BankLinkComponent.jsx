@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+
 
 export const BankLinkComponent = () => {
   const [bankLink, setBankLink] = useState("");

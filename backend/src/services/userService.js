@@ -57,6 +57,21 @@ export const createUser = async (email, password) => {
     }
 };
 
+export const addGocardless = async (user_id, gocardless_id, gocardless_key) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.execute(
+            "UPDATE users SET gocardless_id = ?, gocardless_key = ? WHERE id = ?",
+            [gocardless_id, gocardless_key, user_id]
+        );
+        return { message: "success" };
+    } catch (error) {
+        throw error;
+    } finally {
+        connection.release();
+    }
+};
+
 export const getUsers = async () => {
     const connection = await pool.getConnection();
     try {
@@ -64,6 +79,19 @@ export const getUsers = async () => {
         return users;
     } catch (error) {
         throw new Error("Error fetching users");
+    } finally {
+        connection.release();
+    }
+};
+
+export const getGocardless = async (user_id) => {
+    const connection = await pool.getConnection();
+    try {        
+        const gocardless_id = await connection.query("SELECT gocardless_id FROM users WHERE id = ? LIMIT 1", user_id);
+        
+        return gocardless_id;
+    } catch (error) {
+        throw new Error("Error fetching gocardless_id");
     } finally {
         connection.release();
     }
