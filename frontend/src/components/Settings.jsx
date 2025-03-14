@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { IoMdAddCircle } from "react-icons/io";
 
+
+
 function Settings() {
-    const [gocardlessID, setGocardlessID] = useState(null);
+    const [gocardless_id, setGocardless_id] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -17,9 +19,9 @@ function Settings() {
                     withCredentials: true,
                 });
 
-                setGocardlessID(response.data[0].gocardless_id);
+                setGocardless_id(response.data.gocardless_id);
             } catch (error) {
-                setGocardlessID(null);
+                setGocardless_id(undefined);
             } finally {
                 setLoading(false);
             }
@@ -37,19 +39,20 @@ function Settings() {
             <GoCardlessForm
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
-                gocardlessID={gocardlessID}
-                setGocardlessID={setGocardlessID}
+                gocardless_id={gocardless_id}
+                setGocardless_id={setGocardless_id}
             />
             <h1>Settings</h1>
             <h2>GoCardless user:</h2>
             <p>SecretID</p>
-            <p>{gocardlessID && gocardlessID}</p> //short-circuit evaluation
+            {/* short-circuit evaluation */}
+            <p>{gocardless_id && gocardless_id}</p>
             <p>
                 <button className="icon-button" onClick={() => setIsOpen(true)}>
-                    <IoMdAddCircle /> {gocardlessID ? "Update" : "Create"}
+                    <IoMdAddCircle /> {gocardless_id ? "Update" : "Create"}
                 </button>
             </p>
-            {gocardlessID ? <h2>Bank accounts:</h2> : ""}
+            {gocardless_id ? <h2>Bank accounts:</h2> : ""}
         </>
     );
 }

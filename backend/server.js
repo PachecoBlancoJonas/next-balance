@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
-import apiRoutes from "./src/routes/api.js";
+import gocardlessRoutes from "./src/routes/gocardlessRouter.js";
 import userRoutes from "./src/routes/userRouter.js";
 
 // server config
@@ -18,7 +18,7 @@ server.use(
 server.use(express.json());
 
 // Routes
-server.use("/api", apiRoutes);
+server.use("/gocardless", gocardlessRoutes);
 server.use("/user", userRoutes);
 
 // Start server

@@ -1,32 +1,37 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
+import { FiExternalLink } from "react-icons/fi";
 
 const GoCardlessForm = (props) => {
-    const { isOpen, setIsOpen, gocardlessID, setGocardlessID } = props;
+    const { isOpen, setIsOpen, gocardless_id, setGocardless_id } = props;
 
-    // const [gocardless_id, setGocardless_id] = useState(null);
-    const [gocardless_key, setGocardless_key] = useState(null);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    const [gocardless_key, setGocardless_key] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        
         try {
+            // verify creating gocardlessToken with secret
             await axios.post(
-                `${apiUrl}/user/addgocardless`,
-                {
-                    gocardlessID,
-                    gocardless_key,
-                },
+                `${apiUrl}/gocardless/create-access-token`,
+                { gocardless_id, gocardless_key },
                 { withCredentials: true }
             );
+
+            // save secret on user in db
+            await axios.post(
+                `${apiUrl}/user/addgocardless`,
+                { gocardless_id, gocardless_key },
+                { withCredentials: true }
+            );
+
             setIsOpen(false);
         } catch (error) {
             setError(
-                error.response?.data?.error || "Create GoCardless secret error"
+                error.response?.data?.error || "Error in GoCardless process"
             );
         }
     };
@@ -40,10 +45,10 @@ const GoCardlessForm = (props) => {
                     <label>ID</label>
                     <input
                         autoFocus
-                        id="gocardlessID"
+                        id="gocardless_id"
                         type="text"
-                        value={gocardlessID}
-                        onChange={(e) => setGocardlessID(e.target.value)}
+                        value={gocardless_id ? gocardless_id : ""}
+                        onChange={(e) => setGocardless_id(e.target.value)}
                         placeholder="Gocardless ID"
                         required
                     />
@@ -65,15 +70,17 @@ const GoCardlessForm = (props) => {
                     sure you store it somewhere safe and don't share it
                 </p>
                 <button type="submit">
-                    {gocardlessID ? "Update" : "Create"}
+                    {gocardless_id ? "Update" : "Create"}
                 </button>
                 {error && <p style={{ color: "#c92020" }}>{error}</p>}
             </form>
             <a
+                className="icon-button"
                 href="https://bankaccountdata.gocardless.com/user-secrets/"
                 target="_blank"
             >
                 GoCardless web
+                <FiExternalLink />
             </a>
         </dialog>
     );

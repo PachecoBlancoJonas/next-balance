@@ -1,18 +1,12 @@
 import * as userService from "../services/userService.js";
-
-const cookie_token_config = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "Strict",
-    expires: new Date(Date.now() + 3600000),
-};
+import cookie_config from "../utils/cookieConfig.js";
 
 export const createUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const newUser = await userService.createUser(email, password);
-        res.cookie("token", newUser.token, cookie_token_config);
+        res.cookie("token", newUser.token, cookie_config);
         res.status(201).json({
             message: "User created successfully",
         });
@@ -26,11 +20,11 @@ export const createUser = async (req, res) => {
 };
 
 export const addGocardless = async (req, res) => {
-    const { gocardlessID, gocardless_key } = req.body;
+    const { gocardless_id, gocardless_key } = req.body;
     const { id } = req.user;
 
     try {
-        await userService.addGocardless(id, gocardlessID, gocardless_key);
+        await userService.addGocardless(id, gocardless_id, gocardless_key);
         res.status(201).json({
             message: "GoCardless secret updated",
         });
@@ -58,7 +52,7 @@ export const loginUser = async (req, res) => {
 
     try {
         const { token, user } = await userService.loginUser(email, password);
-        res.cookie("token", token, cookie_token_config);
+        res.cookie("token", token, cookie_config);
         res.json({ id: user.id, email: user.email });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -85,9 +79,9 @@ export const getCurrentUser = (req, res) => {
 
 export const getGocardless = async (req, res) => {
     try {
-        const gocardlessID = await userService.getGocardless(req.user.id);
+        const gocardless_id = await userService.getGocardless(req.user.id);
 
-        res.json(gocardlessID);
+        res.json(gocardless_id);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

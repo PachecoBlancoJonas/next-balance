@@ -1,9 +1,23 @@
 import { Router } from "express";
 import axios from "axios";
 const router = Router();
-import tokenController from "../controllers/tokenController.js";
-const { getAccessToken } = tokenController;
+import * as gocardlessController from "../controllers/gocardlessController.js";
 const PORT = process.env.PORT;
+import verifyUser from "../middleware/verifyUser.js";
+
+// get accessToken from cookies
+router.get(
+    "/get-access-token",
+    verifyUser,
+    gocardlessController.getAccessToken
+);
+
+// create a new AccessToken with SECRET from FORM or DB
+router.post(
+    "/create-access-token",
+    verifyUser,
+    gocardlessController.createAccessToken
+);
 
 // Route for banks list
 router.get("/banks/", async (req, res) => {

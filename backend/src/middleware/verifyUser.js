@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.JWT_SECRET;
 
-const verifyToken = (req, res, next) => {
-    
+const verifyUser = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -21,4 +20,4 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-export default verifyToken;
+export default verifyUser;
