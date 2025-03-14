@@ -58,6 +58,15 @@ export const createUser = async (email, password) => {
 };
 
 export const addGocardless = async (user_id, gocardless_id, gocardless_key) => {
+    if (gocardless_id === null) {
+        throw new Error("Secret ID needed");
+    }
+    if (gocardless_key === null) {
+        throw new Error("Secret Key needed");
+    }
+
+    // TODO: comprobar que el tokenid y tokensecret sean correctos antes de guardar en BD
+
     const connection = await pool.getConnection();
     try {
         await connection.execute(
@@ -86,9 +95,12 @@ export const getUsers = async () => {
 
 export const getGocardless = async (user_id) => {
     const connection = await pool.getConnection();
-    try {        
-        const gocardless_id = await connection.query("SELECT gocardless_id FROM users WHERE id = ? LIMIT 1", user_id);
-        
+    try {
+        const gocardless_id = await connection.query(
+            "SELECT gocardless_id FROM users WHERE id = ? LIMIT 1",
+            user_id
+        );
+
         return gocardless_id;
     } catch (error) {
         throw new Error("Error fetching gocardless_id");

@@ -7,7 +7,8 @@
     text-align: center;
 }
 
-body, html {
+body,
+html {
     height: 100%;
     margin: 0;
 }
@@ -16,12 +17,12 @@ header {
     padding-top: 2rem;
 }
 
-nav, .rigth-links {
+nav,
+.rigth-links {
     display: flex;
     gap: 2rem;
     align-items: center;
     height: 50px;
-
 }
 
 .rigth-links {
@@ -29,11 +30,12 @@ nav, .rigth-links {
 }
 
 footer {
-  margin-top: auto;
-  padding: 64px 0;
+    margin-top: auto;
+    padding: 64px 0;
 }
 
-form, form > div {
+form,
+form > div {
     display: flex;
     flex-direction: column;
     place-items: center;
@@ -43,14 +45,16 @@ a {
     cursor: pointer;
 }
 
-
-.logout-icon {
-    height: 1rem;
-    width: 1rem;
-    position: relative;
-    top: 3px;
-}
-
 .settings-icon {
     display: flex;
+}
+
+.modal {
+    top: 30%;
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }

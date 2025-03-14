@@ -26,17 +26,16 @@ export const createUser = async (req, res) => {
 };
 
 export const addGocardless = async (req, res) => {
-    const { gocardless_id, gocardless_key } = req.body;
+    const { gocardlessID, gocardless_key } = req.body;
     const { id } = req.user;
 
     try {
-        await userService.addGocardless(id, gocardless_id, gocardless_key);
+        await userService.addGocardless(id, gocardlessID, gocardless_key);
         res.status(201).json({
             message: "GoCardless secret updated",
         });
     } catch (error) {
-        console.error("Database error:", error);
-        res.status(500).json({ error: "Error updating GoCardless secret" });
+        res.status(500).json({ error: error.message });
     }
 };
 

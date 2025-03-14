@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const GoCardlessForm = () => {
-    const [gocardless_id, setGocardless_id] = useState("");
-    const [gocardless_key, setGocardless_key] = useState("");
+const GoCardlessForm = (props) => {
+    const { isOpen, setIsOpen, gocardlessID, setGocardlessID } = props;
+
+    // const [gocardless_id, setGocardless_id] = useState(null);
+    const [gocardless_key, setGocardless_key] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
@@ -16,12 +18,12 @@ const GoCardlessForm = () => {
             await axios.post(
                 `${apiUrl}/user/addgocardless`,
                 {
-                    gocardless_id,
+                    gocardlessID,
                     gocardless_key,
                 },
                 { withCredentials: true }
             );
-            navigate("/settings");
+            setIsOpen(false);
         } catch (error) {
             setError(
                 error.response?.data?.error || "Create GoCardless secret error"
@@ -30,36 +32,50 @@ const GoCardlessForm = () => {
     };
 
     return (
-        <div className="create_secret">
-            <h1>New Cardless Secret:</h1>
+        <dialog className="modal" open={isOpen}>
+            <button onClick={() => setIsOpen(false)}>Cerrar</button>
+            <h3>User Secret</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Secret ID:</label>
+                    <label>ID</label>
                     <input
                         autoFocus
-                        id="gocardless_id"
-                        type="password"
-                        value={gocardless_id}
-                        onChange={(e) => setGocardless_id(e.target.value)}
+                        id="gocardlessID"
+                        type="text"
+                        value={gocardlessID}
+                        onChange={(e) => setGocardlessID(e.target.value)}
                         placeholder="Gocardless ID"
-                        requiered
+                        required
                     />
                 </div>
                 <div>
-                    <label>Secret Key:</label>
+                    <label>Key</label>
                     <input
                         id="gocardless_key"
-                        type="password"
+                        type="text"
                         value={gocardless_key}
                         onChange={(e) => setGocardless_key(e.target.value)}
                         placeholder="Gocardless Key"
-                        requiered
+                        required
                     />
                 </div>
-                <button type="submit">Create GoCardless Secret</button>
+                <p>
+                    This is a secret key for authentication. It will not be
+                    displayed later anywhere on the dashboard or website. Make
+                    sure you store it somewhere safe and don't share it
+                </p>
+                <button type="submit">
+                    {gocardlessID ? "Update" : "Create"}
+                </button>
                 {error && <p style={{ color: "#c92020" }}>{error}</p>}
             </form>
-        </div>
+            <a
+                href="https://bankaccountdata.gocardless.com/user-secrets/"
+                target="_blank"
+            >
+                GoCardless web
+            </a>
+        </dialog>
     );
 };
 

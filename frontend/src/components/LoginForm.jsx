@@ -33,6 +33,7 @@ const LoginForm = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="JohnDoe@domain.com"
+                        required
                     />
                 </div>
                 <div>
@@ -42,6 +43,7 @@ const LoginForm = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
+                        required
                     />
                 </div>
                 <button type="submit">Login</button>

@@ -9,6 +9,7 @@ import Footer from "./components/Footer.jsx";
 import NextBalance from "./components/NextBalance.jsx";
 import NextTransactions from "./components/NextTransactions.jsx";
 import Settings from "./components/Settings.jsx";
+import GoCardlessForm from "./components/GoCardlessForm.jsx";
 
 function App() {
     return (

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import GoCardlessForm from "./GoCardlessForm";
+import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
+import { IoMdAddCircle } from "react-icons/io";
 
 function Settings() {
     const [gocardlessID, setGocardlessID] = useState(null);
+    const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -31,17 +34,22 @@ function Settings() {
 
     return (
         <>
-            {gocardlessID ? (
-                <>
-                    <h1>Settings</h1>
-                    <h2>GoCardless user:</h2>
-                    <p>GoCardless SecretID: {gocardlessID}</p>
-                    <p>GoCardless SecretKey:</p>
-                    <h2>Bank accounts:</h2>
-                </>
-            ) : (
-                <GoCardlessForm />
-            )}
+            <GoCardlessForm
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                gocardlessID={gocardlessID}
+                setGocardlessID={setGocardlessID}
+            />
+            <h1>Settings</h1>
+            <h2>GoCardless user:</h2>
+            <p>SecretID</p>
+            <p>{gocardlessID && gocardlessID}</p> //short-circuit evaluation
+            <p>
+                <button className="icon-button" onClick={() => setIsOpen(true)}>
+                    <IoMdAddCircle /> {gocardlessID ? "Update" : "Create"}
+                </button>
+            </p>
+            {gocardlessID ? <h2>Bank accounts:</h2> : ""}
         </>
     );
 }

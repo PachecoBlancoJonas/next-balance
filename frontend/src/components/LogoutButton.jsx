@@ -16,7 +16,7 @@ const LogoutButton = () => {
     };
 
     return (
-        <a onClick={handleLogout}>
+        <a className="icon-button" onClick={handleLogout}>
             Logout <CiLogout className="logout-icon" />
         </a>
     );
