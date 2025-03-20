@@ -11,7 +11,36 @@ const hashPassword = async (password) => {
     return hashedPassword;
 };
 
+export const createUser = async (email, password) => {
+    // Create a new connection to DB
+    const connection = await pool.getConnection();
+    try {
+        // hash password
+        const hashedPassword = await hashPassword(password);
+
+        // Create new user in the DB
+        const result = await pool.execute(
+            "INSERT INTO users (email, password) VALUES (?, ?)",
+            [email, hashedPassword]
+        );
+
+        // Get userId of the new user
+        const userId = result.insertId.toString();
+
+        // If Ok -> Create token
+        const token = jwt.sign({ id: userId, email }, SECRET_KEY, {
+            expiresIn: "1h",
+        });
+        return { id: userId, email, token };
+    } catch (error) {
+        throw error;
+    } finally {
+        connection.release();
+    }
+};
+
 export const loginUser = async (email, password) => {
+    // Get user from DB
     const rows = await pool.execute("SELECT * FROM users WHERE email = ?", [
         email,
     ]);
@@ -19,42 +48,19 @@ export const loginUser = async (email, password) => {
     if (rows.length === 0) {
         throw new Error("User not found");
     }
-
     const user = rows[0];
 
+    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
         throw new Error("Bad password");
     }
 
+    // If Ok -> Create token
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
         expiresIn: "1h",
     });
-
     return { token, user };
-};
-
-export const createUser = async (email, password) => {
-    const connection = await pool.getConnection();
-    try {
-        const hashedPassword = await hashPassword(password);
-        const result = await connection.execute(
-            "INSERT INTO users (email, password) VALUES (?, ?)",
-            [email, hashedPassword]
-        );
-
-        const userId = result.insertId.toString();
-
-        const token = jwt.sign({ id: userId, email }, SECRET_KEY, {
-            expiresIn: "1h",
-        });
-
-        return { id: userId, email, token };
-    } catch (error) {
-        throw error;
-    } finally {
-        connection.release();
-    }
 };
 
 export const addGocardless = async (user_id, gocardless_id, gocardless_key) => {

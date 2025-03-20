@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
+import { useAuth } from "../context/UserContext.jsx";
 
 const NewUserForm = () => {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ const NewUserForm = () => {
 
     const passwordRef = useRef(null);
     const repeatPasswordRef = useRef(null);
+
+    const { login } = useAuth();
 
     const tooglePassword = (e) => {
         if (
@@ -38,11 +41,15 @@ const NewUserForm = () => {
             return;
         }
         try {
-            await axios.post(`${apiUrl}/user/create`, {
-                email,
-                password,
-            });
-
+            await axios.post(
+                `${apiUrl}/user/create`,
+                {
+                    email,
+                    password,
+                },
+                { withCredentials: true }
+            );
+            await login(email, password);
             navigate("/");
         } catch (error) {
             setErrorMessage(error.response?.data?.error || "Create user error");

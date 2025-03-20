@@ -20,15 +20,17 @@ export const getAccessToken = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 export const createAccessToken = async (req, res) => {
     // Get gocardless secret from FORM
     const { gocardless_id, gocardless_key } = req.body;
 
-
+    // TODO It's really necessary here?
+    // ************************************************************************
     // Else get from DB
     if (!gocardless_id || !gocardless_key) {
         const secret = await userService.getGocardlessSecret(req.user.id);
-        
+
         gocardless_id = secret.gocardless_id;
         gocardless_key = secret.gocardless_key;
     }
@@ -39,10 +41,10 @@ export const createAccessToken = async (req, res) => {
             .status(400)
             .json({ error: "Missing GoCardless credentials" });
     }
+    // ************************************************************************
 
     // Create cookie gocardlessToken with credentials
     try {
-        
         const newToken = await gocardlessService.createAccessToken(
             gocardless_id,
             gocardless_key

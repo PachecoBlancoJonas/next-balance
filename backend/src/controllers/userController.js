@@ -19,6 +19,18 @@ export const createUser = async (req, res) => {
     }
 };
 
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const { token, user } = await userService.loginUser(email, password);
+        res.cookie("token", token, cookie_config);
+        res.json({ id: user.id, email });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 export const addGocardless = async (req, res) => {
     const { gocardless_id, gocardless_key } = req.body;
     const { id } = req.user;
@@ -47,18 +59,6 @@ export const getUsers = async (req, res) => {
     }
 };
 
-export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const { token, user } = await userService.loginUser(email, password);
-        res.cookie("token", token, cookie_config);
-        res.json({ id: user.id, email: user.email });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
@@ -74,6 +74,7 @@ export const getCurrentUser = (req, res) => {
         return res.status(401).json({ error: "Not authenticated" });
     }
 
+    // get user 
     res.json({ id: req.user.id, email: req.user.email });
 };
 

@@ -12,12 +12,13 @@ const GoCardlessForm = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Get New GoCardless Secret info from the Form
         const formData = new FormData(e.target);
         const gocardless_id = formData.get("gocardless_id");
         const gocardless_key = formData.get("gocardless_key");
 
         try {
-            // verify creating gocardlessToken with secret
+            // try create gocardlessToken with new GoCardless Secret before safe in the DB
             await axios.post(
                 `${apiUrl}/gocardless/create-access-token`,
                 {
@@ -27,7 +28,7 @@ const GoCardlessForm = (props) => {
                 { withCredentials: true }
             );
 
-            // save secret on user in db
+            // save GoCardless Secret in the user table in the DB
             await axios.post(
                 `${apiUrl}/user/addgocardless`,
                 {
