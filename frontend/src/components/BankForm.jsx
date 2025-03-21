@@ -3,8 +3,8 @@ import { useState, useRef } from "react";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { FiExternalLink } from "react-icons/fi";
 
-const GoCardlessForm = (props) => {
-    const { isOpen, setIsOpen, gocardless_id, setGocardless_id } = props;
+const BankForm = (props) => {
+    const { isOpenBank, setIsOpenBank } = props;
 
     // const [gocardless_key, setGocardless_key] = useState("");
     const [error, setError] = useState("");
@@ -13,9 +13,6 @@ const GoCardlessForm = (props) => {
         e.preventDefault();
 
         // Get New GoCardless Secret info from the Form
-        const formData = new FormData(e.target);
-        const gocardless_id = formData.get("gocardless_id");
-        const gocardless_key = formData.get("gocardless_key");
 
         try {
             // try create gocardlessToken with new GoCardless Secret before safe in the DB
@@ -37,8 +34,7 @@ const GoCardlessForm = (props) => {
                 },
                 { withCredentials: true }
             );
-            setGocardless_id(gocardless_id);
-            setIsOpen(false);
+            setIsOpenBank(false);
         } catch (error) {
             setError(
                 error.response?.data?.error || "Error in GoCardless process"
@@ -47,21 +43,25 @@ const GoCardlessForm = (props) => {
     };
 
     return (
-        <dialog className="modal" open={isOpen}>
-            <button onClick={() => setIsOpen(false)}>Cerrar</button>
-            <h3>User Secret</h3>
+        <dialog className="modal" open={isOpenBank}>
+            <button onClick={() => setIsOpenBank(false)}>Cerrar</button>
+            <h3>New Bank</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>ID</label>
-                    <input
+                    <label>Country</label>
+                    <select
                         autoFocus
                         autoComplete="off"
-                        id="gocardless_id"
-                        type="text"
-                        name="gocardless_id"
-                        placeholder="Gocardless ID"
+                        id="country"
+                        type="select"
+                        name="country"
+                        placeholder="Country"
                         required
-                    />
+                    >
+                        <option>Country</option>
+                        <option>Country</option>
+                        <option>Country</option>
+                    </select>
                 </div>
                 <div>
                     <label>Key</label>
@@ -79,9 +79,7 @@ const GoCardlessForm = (props) => {
                     displayed later anywhere on the dashboard or website. Make
                     sure you store it somewhere safe and don't share it
                 </p>
-                <button type="submit">
-                    {gocardless_id ? "Update" : "Create"}
-                </button>
+                <button type="submit">"Create"</button>
                 {error && <p style={{ color: "#c92020" }}>{error}</p>}
             </form>
             <a
@@ -96,4 +94,4 @@ const GoCardlessForm = (props) => {
     );
 };
 
-export default GoCardlessForm;
+export default BankForm;

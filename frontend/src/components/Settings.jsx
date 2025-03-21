@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import GoCardlessForm from "./GoCardlessForm";
+import BankForm from "./BankForm";
 import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { IoMdAddCircle } from "react-icons/io";
@@ -42,6 +43,7 @@ function Settings() {
                 gocardless_id={gocardless_id}
                 setGocardless_id={setGocardless_id}
             />
+            <BankForm isOpenBank={isOpenBank} setIsOpenBank={setIsOpenBank} />
             <h1>Settings</h1>
             <h2>GoCardless user:</h2>
             <p>SecretID</p>
