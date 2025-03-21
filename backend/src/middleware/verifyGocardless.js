@@ -1,35 +1,20 @@
 import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.JWT_SECRET;
+import * as gocardlessService from "../services/gocardlessService.js";
+import cookie_config from "../utils/cookieConfig.js";
 
 const verifyCardless = (req, res, next) => {
-    const gocardlessToken = req.cookies.gocardlessToken;
-    const user_id = req.user.user_id;
-
-    // TODO:
-    // 1º gocardlessAccessToken cookie exists?
-    if (gocardlessToken) {
-        // if access is expired -> refresh token
-        // else if refresh also expired -> 2º
-        // gocardlessservice.getGocardlessToken
-    } else {
-        // 2º If not -> user have SECRET?
-        // get SECRET from DB with user_id
-        // create new gocardlessAccessToken cookie
-        try {
-            
-        }
-
-    }
-
-
-    // 3º If not -> error, secret needed
+    const gocardlessToken = gocardlessService.getAccessToken(
+        req.cookies.gocardlessToken
+    );
+    res.cookie("gocardlessToken", gocardlessToken, cookie_config);
 
     jwt.verify(gocardlessToken, SECRET_KEY, (err, decoded) => {
         if (err) {
-            return res.status(403).json({ error: "Invalid or expired token" });
+            return res.status(403).json({ error: "Gocardless Secret missed" });
         }
 
-        req.accessToken = decoded;
+        req.accessToken = decoded.accessToken;
         next();
     });
 };

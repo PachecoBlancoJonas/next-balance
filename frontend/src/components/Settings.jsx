@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { IoMdAddCircle } from "react-icons/io";
 
-
-
 function Settings() {
-    const [gocardless_id, setGocardless_id] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
+    const [gocardless_id, setGocardless_id] = useState("");
+    const [isOpenSecret, setIsOpenSecret] = useState(false);
+    const [isOpenBank, setIsOpenBank] = useState(false);
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -37,8 +37,8 @@ function Settings() {
     return (
         <>
             <GoCardlessForm
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
+                isOpenSecret={isOpenSecret}
+                setIsOpenSecret={setIsOpenSecret}
                 gocardless_id={gocardless_id}
                 setGocardless_id={setGocardless_id}
             />
@@ -48,11 +48,22 @@ function Settings() {
             {/* short-circuit evaluation */}
             <p>{gocardless_id && gocardless_id}</p>
             <p>
-                <button className="icon-button" onClick={() => setIsOpen(true)}>
+                <button
+                    className="icon-button"
+                    onClick={() => setIsOpenSecret(true)}
+                >
                     <IoMdAddCircle /> {gocardless_id ? "Update" : "Create"}
                 </button>
             </p>
             {gocardless_id ? <h2>Bank accounts:</h2> : ""}
+            <p>
+                <button
+                    className="icon-button"
+                    onClick={() => setIsOpenBank(true)}
+                >
+                    <IoMdAddCircle /> Add bank account
+                </button>
+            </p>
         </>
     );
 }

@@ -4,45 +4,17 @@ const router = Router();
 import * as gocardlessController from "../controllers/gocardlessController.js";
 const PORT = process.env.PORT;
 import verifyUser from "../middleware/verifyUser.js";
-
-// get accessToken from cookies
-router.get(
-    "/get-access-token",
-    verifyUser,
-    gocardlessController.getAccessToken
-);
+import verifyGocardless from "../middleware/verifyGocardless.js";
 
 // create a new AccessToken with SECRET from FORM or DB
 router.post(
-    "/create-access-token",
+    "/create-new-access-token",
     verifyUser,
-    gocardlessController.createAccessToken
+    gocardlessController.createNewAccessToken
 );
 
 // Route for banks list
-router.get("/banks/", async (req, res) => {
-    const { country } = req.query;
-
-    console.log(`Request GET /banks/?country=${country}`);
-    try {
-        const { accessToken } = await getAccessToken();
-
-        const response = await axios.get(
-            `${process.env.GOCARDLESS_API_BASE_URL}/institutions/?country=${country}`,
-            {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
-
-        res.json(response.data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching banks" });
-    }
-});
+router.get("/banks/", verifyGocardless, gocardlessController.getBanks);
 
 // Route for get bank link
 router.get("/bank-link/", async (req, res) => {

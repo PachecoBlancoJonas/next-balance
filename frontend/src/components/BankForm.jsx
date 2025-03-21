@@ -4,7 +4,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 import { FiExternalLink } from "react-icons/fi";
 
 const GoCardlessForm = (props) => {
-    const { isOpenSecret, setIsOpenSecret, gocardless_id, setGocardless_id } = props;
+    const { isOpen, setIsOpen, gocardless_id, setGocardless_id } = props;
 
     // const [gocardless_key, setGocardless_key] = useState("");
     const [error, setError] = useState("");
@@ -38,7 +38,7 @@ const GoCardlessForm = (props) => {
                 { withCredentials: true }
             );
             setGocardless_id(gocardless_id);
-            setIsOpenSecret(false);
+            setIsOpen(false);
         } catch (error) {
             setError(
                 error.response?.data?.error || "Error in GoCardless process"
@@ -47,8 +47,8 @@ const GoCardlessForm = (props) => {
     };
 
     return (
-        <dialog className="modal" open={isOpenSecret}>
-            <button onClick={() => setIsOpenSecret(false)}>Cerrar</button>
+        <dialog className="modal" open={isOpen}>
+            <button onClick={() => setIsOpen(false)}>Cerrar</button>
             <h3>User Secret</h3>
             <form onSubmit={handleSubmit}>
                 <div>
