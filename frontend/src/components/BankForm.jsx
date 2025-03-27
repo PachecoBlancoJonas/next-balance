@@ -1,13 +1,54 @@
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { FiExternalLink } from "react-icons/fi";
 
 const BankForm = (props) => {
     const { isOpenBank, setIsOpenBank } = props;
-
-    // const [gocardless_key, setGocardless_key] = useState("");
+    const [countries, setCountries] = useState([]);
+    const [banks, setBanks] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState("");
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            const cachedCountries = localStorage.getItem("countries");
+            if (cachedCountries) {
+                setCountries(JSON.parse(cachedCountries));
+            } else {
+                const { data } = await axios.get(
+                    `${apiUrl}/gocardless/countries`,
+                    { withCredentials: true }
+                );
+                setCountries(data);
+                localStorage.setItem("countries", JSON.stringify(data));
+            }
+        };
+
+        fetchCountries();
+    }, []);
+
+    const handleCountryChange = async (event) => {
+        const countryCode = event.target.value;
+        setSelectedCountry(countryCode);
+
+        if (!countryCode) {
+            setBanks([]);
+            return;
+        }
+
+        try {
+            const { data } = await axios.get(
+                `${apiUrl}/gocardless/banks?country=${countryCode}`,
+                { withCredentials: true }
+            );
+            setBanks(data);
+        } catch (error) {
+            setError(
+                error.response?.data?.error || "Error in GoCardless process"
+            );
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,14 +57,9 @@ const BankForm = (props) => {
 
         try {
             // try create gocardlessToken with new GoCardless Secret before safe in the DB
-            await axios.post(
-                `${apiUrl}/gocardless/create-new-access-token`,
-                {
-                    gocardless_id,
-                    gocardless_key,
-                },
-                { withCredentials: true }
-            );
+            await axios.get(`${apiUrl}/gocardless/countries`, {
+                withCredentials: true,
+            });
 
             // save GoCardless Secret in the user table in the DB
             await axios.post(
@@ -50,46 +86,44 @@ const BankForm = (props) => {
                 <div>
                     <label>Country</label>
                     <select
-                        autoFocus
-                        autoComplete="off"
                         id="country"
                         type="select"
                         name="country"
                         placeholder="Country"
                         required
+                        onChange={handleCountryChange}
+                        value={selectedCountry}
                     >
-                        <option>Country</option>
-                        <option>Country</option>
-                        <option>Country</option>
+                        {countries.map((country) => (
+                            <option key={country.id} value={country.iso_code}>
+                                {country.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div>
-                    <label>Key</label>
-                    <input
-                        id="gocardless_key"
+                    <label>Bank</label>
+                    <select
+                        autoFocus
                         autoComplete="off"
-                        type="text"
-                        name="gocardless_key"
-                        placeholder="Gocardless Key"
+                        id="bank"
+                        type="select"
+                        name="bank"
+                        placeholder="bank"
                         required
-                    />
+                        disabled={!selectedCountry}
+                    >
+                        <option value="">Select a bank:</option>
+                        {banks.map((bank) => (
+                            <option key={bank.id} value={bank.id}>
+                                {bank.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <p>
-                    This is a secret key for authentication. It will not be
-                    displayed later anywhere on the dashboard or website. Make
-                    sure you store it somewhere safe and don't share it
-                </p>
-                <button type="submit">"Create"</button>
+                <button type="submit">Create</button>
                 {error && <p style={{ color: "#c92020" }}>{error}</p>}
             </form>
-            <a
-                className="icon-button"
-                href="https://bankaccountdata.gocardless.com/user-secrets/"
-                target="_blank"
-            >
-                GoCardless web
-                <FiExternalLink />
-            </a>
         </dialog>
     );
 };

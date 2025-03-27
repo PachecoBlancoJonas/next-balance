@@ -4,10 +4,26 @@ import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.JWT_SECRET;
 const GOCARDLESS_EXPIRED_HOURS = "72h";
 import * as userService from "../services/userService.js";
+import pool from "../db/index.js";
 
-export const getAccessToken = async (token = null) => {
+export const getCountries = async () => {
+    const connection = await pool.getConnection();
+    try {
+        const countries = await connection.query(
+            "SELECT * FROM countries ORDER BY name;"
+        );
+        return countries;
+    } catch (error) {
+        throw new Error("Error fetching countries");
+    } finally {
+        connection.release();
+    }
+};
+
+export const getAccessToken = async (token = null, user_id) => {
+    // if (Object.keys(token).length === 0) {
     if (!token) {
-        token = await createAccessToken();
+        token = await createAccessToken(user_id);
     } else {
         // Calculate expired dates
         const { accessExpiresAt, refreshExpiresAt } = token;
@@ -19,7 +35,7 @@ export const getAccessToken = async (token = null) => {
         if (accessExpiresDate.isBefore(now)) {
             // If RefreshToken also expired -> use Secret from DB
             if (refreshExpiresDate.isBefore(now)) {
-                token = await createAccessToken();
+                token = await createAccessToken(user_id);
             } else {
                 // If AccessToken expired try to Refresh
                 token = await refreshAccessToken(token);
@@ -28,21 +44,24 @@ export const getAccessToken = async (token = null) => {
     }
 
     // Encode and return the token
-    const newToken = jwt.sign(token, SECRET_KEY, {
-        expiresIn: GOCARDLESS_EXPIRED_HOURS,
-    });
-    return newToken;
+    // const newToken = jwt.sign(token, SECRET_KEY, {
+    //     expiresIn: GOCARDLESS_EXPIRED_HOURS,
+    // });
+
+    // return newToken;
+    return token;
 };
 
 // Create newAccessToken
 export const createAccessToken = async (
+    user_id,
     secret_id = null,
     secret_key = null
 ) => {
     try {
         // If dont have secret get from DB
         if (!secret_id || !secret_key) {
-            const secret = await userService.getGocardlessSecret(req.user.id);
+            const secret = await userService.getGocardlessSecret(user_id);
             secret_id = secret.gocardless_id;
             secret_key = secret.gocardless_key;
         }
@@ -76,7 +95,7 @@ export const createAccessToken = async (
 
         return newToken;
     } catch (err) {
-        console.error("Error creating token:", err);
+        // console.error("Error creating token:", err);
         throw new Error("Cannot create token");
     }
 };

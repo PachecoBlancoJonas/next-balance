@@ -115,7 +115,9 @@ export const getGocardless = async (user_id) => {
 
 export const getGocardlessSecret = async (user_id) => {
     const connection = await pool.getConnection();
+
     try {
+
         const secret = await connection.query(
             "SELECT gocardless_id, gocardless_key FROM users WHERE id = ? LIMIT 1",
             user_id

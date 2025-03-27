@@ -30,7 +30,7 @@ CREATE TABLE country (
     iso_code CHAR(2) NOT NULL UNIQUE
 );
 
-INSERT INTO country (name, iso_code) VALUES
+INSERT INTO countries (name, iso_code) VALUES
 ('Åland Islands', 'AX'),
 ('Andorra', 'AD'),
 ('Australia', 'AU'),

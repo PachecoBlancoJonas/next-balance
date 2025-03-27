@@ -14,7 +14,15 @@ router.post(
 );
 
 // Route for banks list
-router.get("/banks/", verifyGocardless, gocardlessController.getBanks);
+router.get(
+    "/banks/",
+    verifyUser,
+    verifyGocardless,
+    gocardlessController.getBanks
+);
+
+// Route for get countries
+router.get("/countries/", gocardlessController.getCountries);
 
 // Route for get bank link
 router.get("/bank-link/", async (req, res) => {

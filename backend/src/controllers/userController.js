@@ -62,6 +62,7 @@ export const getUsers = async (req, res) => {
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
+        res.clearCookie("gocardlessToken");
 
         res.json({ message: "Logout" });
     } catch (error) {
