@@ -13,12 +13,21 @@ router.post(
     gocardlessController.createNewAccessToken
 );
 
+
 // Route for banks list
 router.get(
     "/banks/",
     verifyUser,
     verifyGocardless,
     gocardlessController.getBanks
+);
+
+// create a new Requisition with SECRET from FORM or DB
+router.post(
+    "/create-requisition",
+    verifyUser,
+    verifyGocardless,
+    gocardlessController.handleRequisition
 );
 
 // Route for get countries

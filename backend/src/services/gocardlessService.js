@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.JWT_SECRET;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 const GOCARDLESS_EXPIRED_HOURS = "72h";
 import * as userService from "../services/userService.js";
 import pool from "../db/index.js";
@@ -17,6 +18,53 @@ export const getCountries = async () => {
         throw new Error("Error fetching countries");
     } finally {
         connection.release();
+    }
+};
+
+export const getBanks = async (country, accessToken) => {
+    try {
+        const response = await axios.get(
+            `${process.env.GOCARDLESS_API_BASE_URL}/institutions/?country=${country}`,
+            {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching banks from GoCardless" + error.message);
+    }
+};
+
+export const createRequisition = async (institution_id, accessToken) => {
+    try {
+        const payload = {
+            institution_id,
+            redirect: `${FRONTEND_URL}/settings`,
+        };
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const { data } = await axios.post(
+            `${process.env.GOCARDLESS_API_BASE_URL}/requisitions/`,
+            payload,
+            { headers }
+        );
+        // console.log(data);
+        return {
+            requisition_id: data.id,
+            bank_link: data.link,
+        };
+    } catch (error) {
+        console.log(error);
+        throw new Error(
+            "Error creating requisition from GoCardless" + error.message
+        );
     }
 };
 

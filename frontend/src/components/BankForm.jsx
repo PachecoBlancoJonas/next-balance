@@ -8,6 +8,8 @@ const BankForm = (props) => {
     const [countries, setCountries] = useState([]);
     const [banks, setBanks] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState("");
+    const [institutionId, setInstitutionId] = useState("");
+
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -45,7 +47,8 @@ const BankForm = (props) => {
             setBanks(data);
         } catch (error) {
             setError(
-                error.response?.data?.error || "Error in GoCardless process"
+                error.response?.data?.error ||
+                    "Error selecting babnks in country in GoCardless process"
             );
         }
     };
@@ -53,24 +56,19 @@ const BankForm = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Get New GoCardless Secret info from the Form
-
         try {
-            // try create gocardlessToken with new GoCardless Secret before safe in the DB
-            await axios.get(`${apiUrl}/gocardless/countries`, {
-                withCredentials: true,
-            });
-
-            // save GoCardless Secret in the user table in the DB
-            await axios.post(
-                `${apiUrl}/user/addgocardless`,
+            // create requisition
+            const { data } = await axios.post(
+                `${apiUrl}/gocardless/create-requisition`,
                 {
-                    gocardless_id,
-                    gocardless_key,
+                    institution_id: institutionId,
                 },
                 { withCredentials: true }
             );
-            setIsOpenBank(false);
+
+            // Redirigir al usuario
+            window.location.href = data.bank_link;
+
         } catch (error) {
             setError(
                 error.response?.data?.error || "Error in GoCardless process"
@@ -112,6 +110,7 @@ const BankForm = (props) => {
                         placeholder="bank"
                         required
                         disabled={!selectedCountry}
+                        onChange={(e) => setInstitutionId(e.target.value)}
                     >
                         <option value="">Select a bank:</option>
                         {banks.map((bank) => (

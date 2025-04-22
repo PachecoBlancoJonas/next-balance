@@ -38,19 +38,38 @@ export const getBanks = async (req, res) => {
     const accessToken = req.accessToken;
 
     try {
-        const response = await axios.get(
-            `${process.env.GOCARDLESS_API_BASE_URL}/institutions/?country=${country}`,
-            {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
+        const banks = await gocardlessService.getBanks(country, accessToken);
 
-        res.json(response.data);
+        res.json(banks);
     } catch (error) {
-        // console.error(error);
-        res.status(500).json({ message: "Error fetching banks" });
+        console.error(error.message);
+        res.status(502).json({
+            message: "Failed to fetch banks from GoCardless API",
+        });
+    }
+};
+
+// Create new requisition from FORM
+export const handleRequisition = async (req, res) => {
+    // Get gocardless secret from FORM
+    const { institution_id } = req.body;
+    const accessToken = req.accessToken;
+
+    try {
+        // First create a requisition from the institution
+        const { requisition_id, bank_link } =
+            await gocardlessService.createRequisition(
+                institution_id,
+                accessToken
+            );
+
+        // Devolver al frontend la URL
+        res.json({ bank_link });
+
+        // res.json({
+        //     message: "Requisition created successfully",
+        // });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
