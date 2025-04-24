@@ -70,3 +70,13 @@ INSERT INTO countries (name, iso_code) VALUES
 ('United Kingdom', 'GB'),
 ('United States', 'US'),
 ('Vatican City', 'VA');
+
+CREATE TABLE accounts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    iban VARCHAR(50) NOT NULL
+    account_ref VARCHAR(50) NOT NULL,
+    balance DECIMAL(10, 2) DEFAULT 0.00,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE KEY unique_user_account (account_ref, user_id)
+);

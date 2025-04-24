@@ -59,6 +59,18 @@ export const getUsers = async (req, res) => {
     }
 };
 
+export const getAccounts = async (req, res) => {
+    const { id } = req.user;
+    try {
+        const accounts = await userService.getAccounts(id);
+        res.status(200).json(accounts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to fetch accounts" });
+    }
+};
+
+
 export const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");

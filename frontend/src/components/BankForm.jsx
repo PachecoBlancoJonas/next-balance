@@ -48,7 +48,7 @@ const BankForm = (props) => {
         } catch (error) {
             setError(
                 error.response?.data?.error ||
-                    "Error selecting babnks in country in GoCardless process"
+                    "Error selecting banks in country in GoCardless process"
             );
         }
     };
@@ -66,7 +66,7 @@ const BankForm = (props) => {
                 { withCredentials: true }
             );
 
-            // Redirigir al usuario
+            // Redirect the user
             window.location.href = data.bank_link;
 
         } catch (error) {

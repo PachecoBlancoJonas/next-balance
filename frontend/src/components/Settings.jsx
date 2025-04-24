@@ -5,6 +5,7 @@ import BankForm from "./BankForm";
 import { Link } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 import { IoMdAddCircle } from "react-icons/io";
+import AccountCard from "./AccountCard";
 
 function Settings() {
     const [gocardless_id, setGocardless_id] = useState("");
@@ -58,6 +59,7 @@ function Settings() {
                 </button>
             </p>
             {gocardless_id ? <h2>Bank accounts:</h2> : ""}
+            <AccountCard />
             <p>
                 <button
                     className="icon-button"

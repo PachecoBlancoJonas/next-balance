@@ -31,7 +31,23 @@ router.post(
 );
 
 // Route for get countries
-router.get("/countries/", gocardlessController.getCountries);
+router.get(
+    "/countries/",
+    verifyUser,
+    gocardlessController.getCountries
+);
+
+router.post(
+    "/bankAccounts",
+    verifyUser,
+    verifyGocardless,
+    gocardlessController.fetchAndSaveAccounts
+);
+
+
+
+
+
 
 // Route for get bank link
 router.get("/bank-link/", async (req, res) => {

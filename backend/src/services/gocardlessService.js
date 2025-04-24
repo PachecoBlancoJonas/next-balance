@@ -3,6 +3,8 @@ import moment from "moment";
 import jwt from "jsonwebtoken";
 const SECRET_KEY = process.env.JWT_SECRET;
 const FRONTEND_URL = process.env.FRONTEND_URL;
+const GOCARDLESS_API_BASE_URL = process.env.GOCARDLESS_API_BASE_URL;
+
 const GOCARDLESS_EXPIRED_HOURS = "72h";
 import * as userService from "../services/userService.js";
 import pool from "../db/index.js";
@@ -24,7 +26,7 @@ export const getCountries = async () => {
 export const getBanks = async (country, accessToken) => {
     try {
         const response = await axios.get(
-            `${process.env.GOCARDLESS_API_BASE_URL}/institutions/?country=${country}`,
+            `${GOCARDLESS_API_BASE_URL}/institutions/?country=${country}`,
             {
                 headers: {
                     Accept: "application/json",
@@ -43,7 +45,7 @@ export const createRequisition = async (institution_id, accessToken) => {
     try {
         const payload = {
             institution_id,
-            redirect: `${FRONTEND_URL}/settings`,
+            redirect: `${FRONTEND_URL}/gocardless/callback`,
         };
         const headers = {
             "Content-Type": "application/json",
@@ -51,7 +53,7 @@ export const createRequisition = async (institution_id, accessToken) => {
             Authorization: `Bearer ${accessToken}`,
         };
         const { data } = await axios.post(
-            `${process.env.GOCARDLESS_API_BASE_URL}/requisitions/`,
+            `${GOCARDLESS_API_BASE_URL}/requisitions/`,
             payload,
             { headers }
         );
@@ -65,6 +67,68 @@ export const createRequisition = async (institution_id, accessToken) => {
         throw new Error(
             "Error creating requisition from GoCardless" + error.message
         );
+    }
+};
+
+export const fetchAccounts = async (requisitionId, accessToken) => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+            `${GOCARDLESS_API_BASE_URL}/requisitions/${requisitionId}`,
+            { headers }
+        );
+        // return accounts as a list
+        const { accounts } = response.data;
+        return accounts;
+    } catch (error) {
+        console.log(error);
+        throw new Error(
+            "Error fetching accounts from GoCardless" + error.message
+        );
+    }
+};
+
+export const fetchIban = async (account_ref, accessToken) => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+            `${GOCARDLESS_API_BASE_URL}/accounts/${account_ref}`,
+            { headers }
+        );
+        // return accounts as a list
+        const { iban } = response.data;
+        return iban;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error fetching iban from GoCardless" + error.message);
+    }
+};
+
+export const fetchBalance = async (account_ref, accessToken) => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+            `${GOCARDLESS_API_BASE_URL}/accounts/${account_ref}/balances`,
+            { headers }
+        );
+        // return accounts as a list
+        const { iban } = response.data;
+        return iban;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Error fetching iban from GoCardless" + error.message);
     }
 };
 
@@ -114,7 +178,7 @@ export const createAccessToken = async (
             secret_key = secret.gocardless_key;
         }
         const response = await axios.post(
-            `${process.env.GOCARDLESS_API_BASE_URL}/token/new/`,
+            `${GOCARDLESS_API_BASE_URL}/token/new/`,
             {
                 secret_id: secret_id,
                 secret_key: secret_key,
@@ -152,7 +216,7 @@ const refreshAccessToken = async (token) => {
     const { refreshToken } = token;
     try {
         const response = await axios.post(
-            `${process.env.GOCARDLESS_API_BASE_URL}/token/refresh/`,
+            `${GOCARDLESS_API_BASE_URL}/token/refresh/`,
             {
                 refreshToken,
             },

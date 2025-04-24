@@ -39,6 +39,20 @@ export const createUser = async (email, password) => {
     }
 };
 
+export const saveAccounts = async (account, iban, user_id) => {
+    const connection = await pool.getConnection();
+    try {
+        await pool.execute(
+            "INSERT INTO accounts (account_ref, iban, user_id) VALUES (?, ?, ?)",
+            [account, iban, user_id]
+        );
+    } catch (error) {
+        console.log(error);
+    } finally {
+        connection.release();
+    }
+};
+
 export const loginUser = async (email, password) => {
     // Get user from DB
     const rows = await pool.execute("SELECT * FROM users WHERE email = ?", [
@@ -97,6 +111,19 @@ export const getUsers = async () => {
     }
 };
 
+export const getAccounts = async (user_id) => {
+    const connection = await pool.getConnection();
+    try {
+        const accounts = await connection.query("SELECT * FROM accounts WHERE user_id = ?", [user_id]);
+        return accounts;
+    } catch (error) {
+        throw new Error("Error fetching users");
+    } finally {
+        connection.release();
+    }
+};
+
+
 export const getGocardless = async (user_id) => {
     const connection = await pool.getConnection();
     try {
@@ -117,7 +144,6 @@ export const getGocardlessSecret = async (user_id) => {
     const connection = await pool.getConnection();
 
     try {
-
         const secret = await connection.query(
             "SELECT gocardless_id, gocardless_key FROM users WHERE id = ? LIMIT 1",
             user_id

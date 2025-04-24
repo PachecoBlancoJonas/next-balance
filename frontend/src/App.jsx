@@ -3,6 +3,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LoginForm from "./components/LoginForm";
 import NewUserForm from "./components/NewUserForm.jsx";
 import UserList from "./components/UserList.jsx";
+import GoCardlessCallback from "./pages/GoCardlessCallback.jsx";
 import "./App.css";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
@@ -49,6 +50,14 @@ function App() {
                         element={
                             <ProtectedRoute>
                                 <UserList />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/gocardless/callback"
+                        element={
+                            <ProtectedRoute>
+                                <GoCardlessCallback />
                             </ProtectedRoute>
                         }
                     />

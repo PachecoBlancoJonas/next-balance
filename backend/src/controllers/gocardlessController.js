@@ -1,3 +1,4 @@
+import e from "express";
 import * as gocardlessService from "../services/gocardlessService.js";
 import * as userService from "../services/userService.js";
 import cookie_config from "../utils/cookieConfig.js";
@@ -71,5 +72,33 @@ export const handleRequisition = async (req, res) => {
         // });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+export const fetchAndSaveAccounts = async (req, res) => {
+    try {
+        const { requisitionId } = req.body;
+        const { id } = req.user;
+        const accessToken = req.accessToken;
+
+        const accounts = await gocardlessService.fetchAccounts(
+            requisitionId,
+            accessToken
+        );
+        // TODO save accounts in DB with other service
+        for (const account of accounts) {
+            const iban = await gocardlessService.fetchIban(
+                account,
+                accessToken
+            );
+            await userService.saveAccounts(account, iban, id);
+        }
+
+        res.status(200).json({
+            message: "Accounts fetched and saved successfully",
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Failed to fetch accounts" });
     }
 };
