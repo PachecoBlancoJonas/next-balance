@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TransactionCard from "./TransactionsCard";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -32,6 +33,7 @@ const AccountCard = () => {
                         <p>
                             <strong>IBAN:</strong> {account.iban}
                         </p>
+                        <TransactionCard accountId={account.id} />
                     </div>
                 ))
             )}

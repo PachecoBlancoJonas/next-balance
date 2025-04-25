@@ -14,6 +14,8 @@ router.get("/list", verifyUser, userController.getUsers);
 router.get("/me", verifyUser, userController.getCurrentUser);
 router.get("/gocardless", verifyUser, userController.getGocardless);
 router.get("/accounts", verifyUser, userController.getAccounts);
+router.get("/transactions/:accountId", verifyUser, userController.getTransactions);
+
 
 
 export default router;

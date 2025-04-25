@@ -80,3 +80,14 @@ CREATE TABLE accounts (
     FOREIGN KEY (user_id) REFERENCES users(id),
     UNIQUE KEY unique_user_account (account_ref, user_id)
 );
+
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaction_ref VARCHAR(50) NOT NULL,
+    value_date TIMESTAMP,
+    amount DECIMAL(10, 2) NOT NULL,
+    concept VARCHAR(300) NOT NULL,
+    account_id INT NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES accounts(id),
+    UNIQUE KEY unique_account_transaction (transaction_ref, account_id)
+);

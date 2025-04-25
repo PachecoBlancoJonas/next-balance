@@ -44,7 +44,12 @@ router.post(
     gocardlessController.fetchAndSaveAccounts
 );
 
-
+router.get(
+    "/transactions/",
+    verifyUser,
+    verifyGocardless,
+    gocardlessController.getTransactions
+);
 
 
 

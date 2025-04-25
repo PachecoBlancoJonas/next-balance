@@ -132,6 +132,28 @@ export const fetchBalance = async (account_ref, accessToken) => {
     }
 };
 
+export const getTransactions = async (account_ref, accessToken) => {
+    try {
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const response = await axios.get(
+            `${GOCARDLESS_API_BASE_URL}/accounts/${account_ref}/transactions`,
+            { headers }
+        );
+        // return transactions as a list
+        const { transactions } = response.data;
+        return transactions.booked;
+    } catch (error) {
+        console.log(error);
+        throw new Error(
+            "Error fetching accounts from GoCardless" + error.message
+        );
+    }
+};
+
 export const getAccessToken = async (token = null, user_id) => {
     // if (Object.keys(token).length === 0) {
     if (!token) {

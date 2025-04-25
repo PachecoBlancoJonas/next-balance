@@ -70,6 +70,16 @@ export const getAccounts = async (req, res) => {
     }
 };
 
+export const getTransactions = async (req, res) => {
+    const { accountId } = req.params;
+    try {
+        const transactions = await userService.getTransactions(accountId);
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to fetch transactions" });
+    }
+};
 
 export const logoutUser = async (req, res) => {
     try {
@@ -87,7 +97,7 @@ export const getCurrentUser = (req, res) => {
         return res.status(401).json({ error: "Not authenticated" });
     }
 
-    // get user 
+    // get user
     res.json({ id: req.user.id, email: req.user.email });
 };
 

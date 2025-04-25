@@ -53,6 +53,28 @@ export const saveAccounts = async (account, iban, user_id) => {
     }
 };
 
+export const saveTransactions = async (account_id, transactions) => {
+    const connection = await pool.getConnection();
+    try {
+        for (const transaction of transactions) {
+            await pool.execute(
+                "INSERT INTO transactions (transaction_ref, value_date, amount, concept, account_id) VALUES (?, ?, ?, ?, ?)",
+                [
+                    transaction.internalTransactionId,
+                    transaction.valueDate,
+                    transaction.transactionAmount.amount,
+                    transaction.remittanceInformationUnstructured,
+                    account_id,
+                ]
+            );
+        }
+    } catch (error) {
+        console.log(error);
+    } finally {
+        connection.release();
+    }
+};
+
 export const loginUser = async (email, password) => {
     // Get user from DB
     const rows = await pool.execute("SELECT * FROM users WHERE email = ?", [
@@ -114,15 +136,32 @@ export const getUsers = async () => {
 export const getAccounts = async (user_id) => {
     const connection = await pool.getConnection();
     try {
-        const accounts = await connection.query("SELECT * FROM accounts WHERE user_id = ?", [user_id]);
+        const accounts = await connection.query(
+            "SELECT * FROM accounts WHERE user_id = ?",
+            [user_id]
+        );
         return accounts;
     } catch (error) {
-        throw new Error("Error fetching users");
+        throw new Error("Error fetching accounts");
     } finally {
         connection.release();
     }
 };
 
+export const getTransactions = async (account_id) => {
+    const connection = await pool.getConnection();
+    try {
+        const transactions = await connection.query(
+            "SELECT * FROM transactions WHERE account_id = ? ORDER BY value_date DESC",
+            [account_id]
+        );
+        return transactions;
+    } catch (error) {
+        throw new Error("Error fetching transactions");
+    } finally {
+        connection.release();
+    }
+};
 
 export const getGocardless = async (user_id) => {
     const connection = await pool.getConnection();

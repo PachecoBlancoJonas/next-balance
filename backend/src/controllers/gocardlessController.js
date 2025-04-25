@@ -50,6 +50,31 @@ export const getBanks = async (req, res) => {
     }
 };
 
+export const getTransactions = async (req, res) => {
+    const { id } = req.user;
+    const accessToken = req.accessToken;
+
+    try {
+        // first get the account_ref
+        const accounts = await userService.getAccounts(id);
+        for (const account of accounts) {
+            const transactions = await gocardlessService.getTransactions(
+                account.account_ref,
+                accessToken
+            );
+            // Save transactions in DB
+            await userService.saveTransactions(account.id, transactions);
+        }
+
+        res.json({ message: "Transactions downloaded successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(502).json({
+            message: "Failed to fetch transactions from GoCardless API",
+        });
+    }
+};
+
 // Create new requisition from FORM
 export const handleRequisition = async (req, res) => {
     // Get gocardless secret from FORM
