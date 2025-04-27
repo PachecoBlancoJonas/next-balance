@@ -59,7 +59,7 @@ function Settings() {
                 </button>
             </p>
             {gocardless_id ? <h2>Bank accounts:</h2> : ""}
-            <AccountCard />
+            {/* <AccountCard /> */}
             <p>
                 <button
                     className="icon-button"

@@ -1,4 +1,4 @@
-#root {
+/* #root {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -57,4 +57,4 @@ a {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-}
+} */
