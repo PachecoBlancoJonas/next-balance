@@ -22,9 +22,8 @@ CREATE TABLE IF NOT EXISTS users (
     gocardless_id VARCHAR(255),
     gocardless_key VARCHAR(255)
 );
-EOF
 
-CREATE TABLE country (
+CREATE TABLE countries (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     iso_code CHAR(2) NOT NULL UNIQUE
@@ -73,7 +72,7 @@ INSERT INTO countries (name, iso_code) VALUES
 
 CREATE TABLE accounts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    iban VARCHAR(50) NOT NULL
+    iban VARCHAR(50) NOT NULL,
     account_ref VARCHAR(50) NOT NULL,
     balance DECIMAL(10, 2) DEFAULT 0.00,
     user_id INT NOT NULL,
@@ -91,3 +90,4 @@ CREATE TABLE transactions (
     FOREIGN KEY (account_id) REFERENCES accounts(id),
     UNIQUE KEY unique_account_transaction (transaction_ref, account_id)
 );
+EOF
