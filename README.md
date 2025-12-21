@@ -1,6 +1,6 @@
 # Next_Balance
 
-#### Video Demo: <URL HERE>
+>
 
 #### Description:
 
