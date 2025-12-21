@@ -8,10 +8,12 @@ import axios from "axios";
 export const createNewAccessToken = async (req, res) => {
     // Get gocardless secret from FORM
     const { gocardless_id, gocardless_key } = req.body;
+    const { id } = req.user;
 
     // Create cookie gocardlessToken with credentials
     try {
         const newToken = await gocardlessService.createAccessToken(
+            id,
             gocardless_id,
             gocardless_key
         );
