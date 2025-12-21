@@ -59,9 +59,24 @@ To run this project locally, you must configure the environment variables and th
 
 2.  **Environment Variables:**
     *   **Backend:** Create a `.env` file in the `/backend` directory. You must include your database credentials, the JWT secret key, and your GoCardless API keys (`SECRET_ID`, `SECRET_KEY`).
+    
+    Example:
+    SECRET_ID=[from https://bankaccountdata.gocardless.com/user-secrets/]
+    SECRET_KEY=[from https://bankaccountdata.gocardless.com/user-secrets/]
+    GOCARDLESS_API_BASE_URL=https://bankaccountdata.gocardless.com/api/v2
+    PORT=5000
+    DB_HOST=localhost
+    DB_USER=next_balance
+    DB_PASSWORD=[your-very-secret-pass]
+    DB_NAME=next_balance
+    JWT_SECRET=[your-very-secret-key]
+    NODE_ENV=development
+    FRONTEND_URL=http://localhost:5173
+
     *   **Frontend:** Create a `.env` file in the `/frontend` directory containing the `VITE_API_URL` pointing to your backend server.
 
 3.  **Dependencies:**
+    *   Ensure Node & Npm is installed.
     *   Navigate to `/backend` and run `npm install`.
     *   Navigate to `/frontend` and run `npm install`.
 
