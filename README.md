@@ -1,7 +1,5 @@
 # Next_Balance
 
->
-
 #### Description:
 
 **Next_Balance** is a robust web application designed to simplify personal finance management by centralizing banking information. In an era where individuals often hold accounts across multiple financial institutions, tracking expenses and balances can become a fragmented and tedious process. Next_Balance addresses this by providing a unified dashboard where users can view transactions and balances from various bank accounts in one place.
