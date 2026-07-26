@@ -48,38 +48,88 @@ MariaDB was selected for its reliability, performance, and SQL compliance. Given
 
 ### Installation and Setup
 
-To run this project locally, you must configure the environment variables and the database.
+#### Prerequisites
 
-1.  **Database Setup:**
-    *   Ensure MariaDB is installed.
-    *   Run the provided shell script to initialize the database and tables:
-        ```bash
-        ./create_db.sh
-        ```
+- [Node.js](https://nodejs.org/) 18+
+- [MariaDB](https://mariadb.org/) 10.6+
+- A [GoCardless Bank Account Data](https://bankaccountdata.gocardless.com/) account (free tier available)
 
-2.  **Environment Variables:**
-    *   **Backend:** Create a `.env` file in the `/backend` directory. You must include your database credentials, the JWT secret key, and your GoCardless API keys (`SECRET_ID`, `SECRET_KEY`).
-    
-    Example:
-    SECRET_ID=[from https://bankaccountdata.gocardless.com/user-secrets/]
-    SECRET_KEY=[from https://bankaccountdata.gocardless.com/user-secrets/]
-    GOCARDLESS_API_BASE_URL=https://bankaccountdata.gocardless.com/api/v2
-    PORT=5000
-    DB_HOST=localhost
-    DB_USER=next_balance
-    DB_PASSWORD=[your-very-secret-pass]
-    DB_NAME=next_balance
-    JWT_SECRET=[your-very-secret-key]
-    NODE_ENV=development
-    FRONTEND_URL=http://localhost:5173
+---
 
-    *   **Frontend:** Create a `.env` file in the `/frontend` directory containing the `VITE_API_URL` pointing to your backend server.
+#### 1. Clone the repository
 
-3.  **Dependencies:**
-    *   Ensure Node & Npm is installed.
-    *   Navigate to `/backend` and run `npm install`.
-    *   Navigate to `/frontend` and run `npm install`.
+```bash
+git clone https://github.com/PachecoBlancoJonas/next-balance.git
+cd next-balance
+```
 
-4.  **Running the App:**
-    *   Start the backend: `npm start` (in `/backend`).
-    *   Start the frontend: `npm run dev` (in `/frontend`).
+#### 2. Set up the database
+
+Install and start MariaDB, then run the setup script from the project root:
+
+```bash
+cp .env.example .env
+# Edit .env and set DB_ROOT_PASSWORD (leave empty if MariaDB has no root password)
+# and choose a DB_PASSWORD for the app user
+
+sudo bash create_db.sh
+```
+
+This creates the `next_balance` database, the app user, and all required tables.
+
+#### 3. Configure the backend
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edit `backend/.env` and fill in the required values:
+
+| Variable | Description |
+|---|---|
+| `DB_PASSWORD` | Must match the password set in the root `.env` |
+| `JWT_SECRET` | Any long random string |
+| `SECRET_ID` | Your GoCardless Secret ID — get it at [bankaccountdata.gocardless.com/user-secrets/](https://bankaccountdata.gocardless.com/user-secrets/) |
+| `SECRET_KEY` | Your GoCardless Secret Key — same URL as above |
+
+> GoCardless credentials can also be added later from the app's Settings page after registering.
+
+#### 4. Configure the frontend
+
+```bash
+cd ../frontend
+cp .env.example .env
+```
+
+The default `VITE_API_URL=http://localhost:5000` works out of the box if the backend runs on port 5000.
+
+#### 5. Install dependencies
+
+```bash
+# Backend
+cd backend && npm install
+
+# Frontend
+cd ../frontend && npm install
+```
+
+#### 6. Run the app
+
+Open two terminals:
+
+**Terminal 1 — Backend:**
+```bash
+cd backend
+node server.js
+```
+
+**Terminal 2 — Frontend:**
+```bash
+cd frontend
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+Register a new account, then go to **Settings** to connect your GoCardless credentials and add a bank account.

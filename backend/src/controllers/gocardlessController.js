@@ -1,8 +1,11 @@
-import e from "express";
 import * as gocardlessService from "../services/gocardlessService.js";
 import * as userService from "../services/userService.js";
 import cookie_config from "../utils/cookieConfig.js";
+import jwt from "jsonwebtoken";
 import axios from "axios";
+
+const SECRET_KEY = process.env.JWT_SECRET;
+const GOCARDLESS_EXPIRED_HOURS = "72h";
 
 // Create new accessToken from FORM
 export const createNewAccessToken = async (req, res) => {
@@ -12,11 +15,14 @@ export const createNewAccessToken = async (req, res) => {
 
     // Create cookie gocardlessToken with credentials
     try {
-        const newToken = await gocardlessService.createAccessToken(
+        const tokenData = await gocardlessService.createAccessToken(
             id,
             gocardless_id,
             gocardless_key
         );
+        const newToken = jwt.sign(tokenData, SECRET_KEY, {
+            expiresIn: GOCARDLESS_EXPIRED_HOURS,
+        });
         res.cookie("gocardlessToken", newToken, cookie_config);
         res.json({
             message: "gocardlessToken created successfully",

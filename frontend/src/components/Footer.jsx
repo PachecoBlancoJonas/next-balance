@@ -1,16 +1,19 @@
-import { SiGithub, SiGithubsponsors } from "react-icons/si";
-import "./Footer.css";
+import { SiGithub } from "react-icons/si";
 
 function Footer() {
     return (
-        <footer>
-            <p>
-                Made with <SiGithubsponsors className="heart-icon" /> <br />
-                by{" "}
-                <a href="https://github.com/PachecoBlancoJonas" target="_blank">
-                    <SiGithub className="github-icon" /> Jonás Pacheco Blanco
+        <footer className="border-t border-border mt-auto">
+            <div className="mx-auto flex max-w-screen-xl items-center justify-center gap-2 px-6 py-6 text-sm text-muted-foreground">
+                <a
+                    href="https://github.com/PachecoBlancoJonas"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+                >
+                    <SiGithub size={14} />
+                    Jonás Pacheco Blanco
                 </a>
-            </p>
+            </div>
         </footer>
     );
 }

@@ -10,12 +10,11 @@ import Footer from "./components/Footer.jsx";
 import NextBalance from "./components/NextBalance.jsx";
 import NextTransactions from "./components/NextTransactions.jsx";
 import Settings from "./components/Settings.jsx";
-import GoCardlessForm from "./components/GoCardlessForm.jsx";
 
 function App() {
     return (
-        <>
-            <Router>
+        <Router>
+            <div className="flex min-h-screen flex-col">
                 <Header />
                 <Routes>
                     <Route path="/login" element={<LoginForm />} />
@@ -28,15 +27,7 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-                    <Route
-                        path="/transactions"
-                        element={
-                            <ProtectedRoute>
-                                <NextTransactions />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
+<Route
                         path="/settings"
                         element={
                             <ProtectedRoute>
@@ -61,10 +52,9 @@ function App() {
                         }
                     />
                 </Routes>
-
                 <Footer />
-            </Router>
-        </>
+            </div>
+        </Router>
     );
 }
 

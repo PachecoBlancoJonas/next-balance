@@ -1,41 +1,50 @@
 import { useState } from "react";
-const apiUrl = import.meta.env.VITE_API_URL;
+import { RefreshCw } from "lucide-react";
 import axios from "axios";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function DownloadTransactionsButton() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
 
     const handleDownload = async () => {
         setLoading(true);
         setMessage("");
+        setIsError(false);
 
         try {
-            const res = await axios.get(`${apiUrl}/gocardless/transactions`, {
+            await axios.get(`${apiUrl}/gocardless/transactions`, {
                 withCredentials: true,
             });
-
-            setMessage("Transactions downloaded successfully!");
+            setMessage("Transactions synced successfully.");
         } catch (error) {
-            const errorMsg =
+            setIsError(true);
+            setMessage(
                 error.response?.data?.message ||
-                "An error occurred while syncing transactions.";
-            setMessage(errorMsg);
+                    "An error occurred while syncing transactions."
+            );
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="p-4">
+        <div className="flex flex-col items-end gap-1">
             <button
                 onClick={handleDownload}
                 disabled={loading}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
             >
-                {loading ? "Downloading..." : "Download Transactions"}
+                <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                {loading ? "Syncing..." : "Sync transactions"}
             </button>
-            {message && <p className="mt-2 text-sm text-gray-700">{message}</p>}
+            {message && (
+                <p className={`text-xs ${isError ? "text-destructive" : "text-muted-foreground"}`}>
+                    {message}
+                </p>
+            )}
         </div>
     );
 }

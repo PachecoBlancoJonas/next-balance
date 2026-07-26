@@ -8,14 +8,16 @@ const verifyCardless = async (req, res, next) => {
     let encodedToken = req.cookies.gocardlessToken;
     let decodedToken;
     if (encodedToken) {
+        let verifyError = false;
         jwt.verify(encodedToken, SECRET_KEY, (err, decoded) => {
             if (err) {
-                return res
-                    .status(403)
-                    .json({ error: "Gocardless Secret missed" });
+                verifyError = true;
+                res.status(403).json({ error: "Gocardless Secret missed" });
+                return;
             }
             decodedToken = decoded;
         });
+        if (verifyError) return;
     }
     // Update token
     try {
