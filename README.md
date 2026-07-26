@@ -1,5 +1,19 @@
 # Next_Balance
 
+Personal finance dashboard. Connect your bank accounts via the GoCardless Open Banking API and track all your transactions in one place.
+
+## Screenshots
+
+| Login | Dashboard |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+
+| Transactions | Settings |
+|---|---|
+| ![Transactions](docs/screenshots/transactions-list.png) | ![Settings](docs/screenshots/settings-accounts.png) |
+
+---
+
 #### Description:
 
 **Next_Balance** is a robust web application designed to simplify personal finance management by centralizing banking information. In an era where individuals often hold accounts across multiple financial institutions, tracking expenses and balances can become a fragmented and tedious process. Next_Balance addresses this by providing a unified dashboard where users can view transactions and balances from various bank accounts in one place.
@@ -106,10 +120,10 @@ The default `VITE_API_URL=http://localhost:5000` works out of the box if the bac
 
 ```bash
 # Backend
-cd backend && npm install
+cd backend && pnpm install
 
 # Frontend
-cd ../frontend && npm install
+cd ../frontend && pnpm install
 ```
 
 #### 6. Run the app
@@ -125,7 +139,7 @@ node server.js
 **Terminal 2 — Frontend:**
 ```bash
 cd frontend
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
